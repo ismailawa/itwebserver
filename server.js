@@ -1,20 +1,7 @@
-// const http = require('http')
-
-
-// const server = http.createServer((req,res)=> {
-
-//    res.end(req.url)
-
-// })
-
-
-// server.listen(3000,"localhost",()=>{
-//     console.log("Server running  on localhost:3000")
-// })
-
-
 const express = require('express')
 const path = require('path')
+
+const PORT = process.env.PORT || 3000
 
 const app = express()
 app.set('views', path.join(__dirname, 'views'));
@@ -29,7 +16,6 @@ app.get("/about", (req,res)=>{
 })
 
 
-
-app.listen(3000,()=> {
-    console.log("Serving is running")
+app.listen(PORT,()=> {
+    console.log("Serving is running " + PORT)
 })

@@ -1,0 +1,14 @@
+version: "3"
+
+services: 
+    myapp:
+        build: 
+            context: .
+        image: ismailawa/itdocker
+        volumes: 
+            - ./:/app
+            - /app/node_modules
+        ports: 
+            - 5000:5000
+        environment: 
+            - PORT=5000
