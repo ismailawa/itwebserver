@@ -1,13 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
     <title>Home</title>
 </head>
+
 <body>
-    <h1>This is index page <%= title %> </h1>
-    <p>Welcome to my first nodejs application</p>
+    <div class="container">
+        <h1>This is index page</h1>
+        <p>Welcome to my first nodejs application</p>
+        <a class="btn btn-success" href="/register"> Register </a>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach((user, index)=>{%>
+                <tr>
+                    <td><%= index+1 %></td>
+                    <td><%= user.name %></td>
+                    <td><%= user.address %></td>
+                    <td>
+                        <a class="btn btn-primary" href="/user/<%= user.id %>">View</a>
+                        <a class="btn btn-warning" href="#">Edit</a>
+                        <a class="btn btn-danger" href="/remove/<%= user.id %>">Delete</a>
+
+                    </td>
+                </tr>
+                <%}) %>
+            </tbody>
+        </table>
+
+    </div>
+    <!-- <img src="images/img.jpg" /> -->
 </body>
+
 </html>

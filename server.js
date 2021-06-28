@@ -1,35 +1,56 @@
-// const http = require('http')
+const express = require("express");
+const path = require("path");
+const morgan = require("morgan");
+const { v4: uuidv4, v4 } = require("uuid");
 
+const users = [];
 
-// const server = http.createServer((req,res)=> {
+const port = process.env.PORT || 3000;
 
-//    res.end(req.url)
+const app = express();
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
-// })
+// Adding Middlewares
+app.use(express.static(path.join(__dirname, "public")));
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+app.get("/", (req, res) => {
+  res.render("index", { users: users });
+});
 
-// server.listen(3000,"localhost",()=>{
-//     console.log("Server running  on localhost:3000")
-// })
+app.get("/about", (req, res) => {
+  res.render("about");
+});
 
+app.get("/register", (req, res) => {
+  res.render("register_view");
+});
 
-const express = require('express')
-const path = require('path')
+app.post("/create_user", (req, res) => {
+  const id = v4();
+  const newuser = { id: id, ...req.body };
+  users.push(newuser);
+  res.redirect("/");
+});
 
-const app = express()
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs')
+app.get("/remove/:id", (req, res) => {
+  const id = req.params.id;
+  const deleteuser = users.filter((user) => user.id == id);
+  const index = users.indexOf(deleteuser[0]);
+  users.splice(index, 1);
+  console.log(users);
+  res.redirect("/");
+});
 
-app.get("/", (req,res)=>{
-    res.render('index')
-})
+app.get("/user/:id", (req, res) => {
+  const id = req.params.id;
+  const user = users.filter((user) => user.id == id)[0];
+  res.render("user_detail", { user: user });
+});
 
-app.get("/about", (req,res)=>{
-    res.render('about')
-})
-
-
-
-app.listen(3000,()=> {
-    console.log("Serving is running")
-})
+app.listen(port, () => {
+  console.log("Serving is running on PORT: " + port);
+});
