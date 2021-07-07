@@ -3,7 +3,7 @@ const path = require("path");
 const morgan = require("morgan");
 const { v4: uuidv4, v4 } = require("uuid");
 
-const users = [];
+var users = [];
 
 const port = process.env.PORT || 3000;
 
@@ -19,10 +19,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.render("index", { users: users });
-});
-
-app.get("/about", (req, res) => {
-  res.render("about");
 });
 
 app.get("/register", (req, res) => {
@@ -49,6 +45,26 @@ app.get("/user/:id", (req, res) => {
   const id = req.params.id;
   const user = users.filter((user) => user.id == id)[0];
   res.render("user_detail", { user: user });
+});
+app.get("/edit/:id", (req, res) => {
+  const id = req.params.id;
+  const user = users.filter((user) => user.id == id)[0];
+  res.render("edit", { user: user });
+});
+app.post("/update", (req, res) => {
+  const { id, name, address } = req.body;
+  // const user = users.filter(user => user.id == id)[0]
+
+  users = users.map((user) => {
+    if (user.id == id) {
+      user.name = name;
+      user.address = address;
+      return user;
+    }
+
+    return user;
+  });
+  res.redirect("/");
 });
 
 app.listen(port, () => {
