@@ -12,9 +12,13 @@
 <body>
     <div class="d-grid gap-2 col-6 mx-auto mt-4">
         <form action="/update" method="POST">
-            <input class="form-control mb-3" type="text" name="name" placeholder="name" value="<%= user.name %>">
-            <input class="form-control mb-3" type="text" name="id" value="<%= user.id %>" hidden>
 
+            <input class="form-control mb-3" type="text" name="id" value="<%= user.id %>" hidden>
+            <input class="form-control mb-3" type="text" name="firstName" placeholder="name"
+                value="<%= user.firstName %>">
+            <input class="form-control mb-3" type="text" name="lastName" placeholder="last name"
+                value="<%= user.lastName %>">
+            <input class="form-control mb-3" type="text" name="email" placeholder="email" value="<%= user.email %>">
             <input class="form-control mb-3" type="text" name="address" placeholder="address"
                 value="<%= user.address %>">
             <button class="btn btn-primary block" type="submit">Update User</button>

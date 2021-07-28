@@ -8,13 +8,13 @@ const connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
   user: "root",
-  password: "password",
+  password: "",
   database: "ixnote",
 });
 
 var users = [];
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 const app = express();
 app.set("views", path.join(__dirname, "views"));
@@ -29,7 +29,6 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   connection.query("SELECT * FROM students", (error, students) => {
     if (!error) {
-      console.log(students);
       res.render("index", { students: students });
     } else {
       console.log(error);
@@ -61,7 +60,6 @@ app.get("/remove/:id", (req, res) => {
   const id = req.params.id;
   connection.query("DELETE FROM students WHERE id=?", [id], (error, result) => {
     if (!error) {
-      console.log(result);
       res.redirect("/");
     } else {
       console.log(error);
@@ -76,7 +74,6 @@ app.get("/user/:id", (req, res) => {
     [id],
     (error, result) => {
       if (!error) {
-        console.log(result);
         res.render("user_detail", { student: result[0] });
       } else {
         console.log(error);
@@ -84,25 +81,25 @@ app.get("/user/:id", (req, res) => {
     }
   );
 });
+
 app.get("/edit/:id", (req, res) => {
   const id = req.params.id;
-  const user = users.filter((user) => user.id == id)[0];
-  res.render("edit", { user: user });
-});
-app.post("/update", (req, res) => {
-  const { id, name, address } = req.body;
-  // const user = users.filter(user => user.id == id)[0]
-
-  users = users.map((user) => {
-    if (user.id == id) {
-      user.name = name;
-      user.address = address;
-      return user;
-    }
-
-    return user;
+  connection.query("SELECT * FROM students WHERE id=?", [id], (error, user) => {
+    res.render("edit", { user: user[0] });
   });
-  res.redirect("/");
+});
+
+app.post("/update", (req, res) => {
+  const { id, firstName, lastName, email, address } = req.body;
+  connection.query(
+    "UPDATE students SET firstName=?, lastName=?, email=?, address=? WHERE id=?",
+    [firstName, lastName, email, address, id],
+    (error, result) => {
+      console.log(result);
+      // const user = users.filter(user => user.id == id)[0]
+      res.redirect("/");
+    }
+  );
 });
 
 app.listen(port, () => {
